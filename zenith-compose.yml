@@ -1,27 +1,30 @@
 x-zenith:
   catalog:
     name: Threadline
-    description: A small anonymous imageboard built with PHP and PostgreSQL.
+    description: A small account-based imageboard built with Go, HTMX, and PostgreSQL.
     authors: [evan]
     source: https://github.com/aes256-gcm/threadz
     license: UNLICENSED
-    tags: [php, postgres, forum]
+    tags: [go, htmx, postgres, forum]
   expose:
-    - { service: app, port: 80, web: true }
+    - { service: app, port: 8080, web: true }
 
 services:
   app:
     build: .
     ports:
-      - "8080:80"
+      - "8080:8080"
     environment:
       APP_NAME: Threadline
       APP_ENV: production
-      DATABASE_URL: pgsql:host=db;port=5432;dbname=threadline
-      DATABASE_USER: threadline
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: threadline
+      DB_USER: threadline
+      PORT: "8080"
       MAX_UPLOAD_MB: "5"
     volumes:
-      - uploads:/var/www/html/public/uploads
+      - uploads:/app/public/uploads
     depends_on:
       db:
         condition: service_healthy

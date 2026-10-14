@@ -42,7 +42,7 @@ button:hover, .button:hover { background: #444; }
 .post__subject, .post__author { color: white; font-weight: bold; }
 .post__number { margin-left: auto; }
 .post__content { display: flow-root; min-height: 60px; padding: 10px; }
-.post__body { margin: 4px 0; overflow-wrap: anywhere; }
+.post__body, .unlockable__content { margin: 4px 0; overflow-wrap: anywhere; white-space: pre-wrap; }
 .post__media { float: left; max-width: min(300px, 40%); margin: 0 14px 6px 0; }
 .post__media img { display: block; max-width: 100%; max-height: 260px; border: 1px solid #444; }
 .post__media figcaption { overflow: hidden; color: #999; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }

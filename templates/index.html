@@ -1,0 +1,138 @@
+{{define "unlock-fields"}}
+<details class="unlock-fields">
+  <summary>Add paid content</summary>
+  <label class="check-row"><input type="checkbox" name="add_unlock" value="1"> Lock something behind credits</label>
+  <div class="form-row">
+    <label>Kind
+      <select name="unlock_type">
+        <option value="tutorial">Tutorial</option>
+        <option value="link">Link</option>
+        <option value="download">Download link</option>
+      </select>
+    </label>
+    <label>Price <span>1–100 credits</span><input type="number" name="unlock_price" value="1" min="1" max="100"></label>
+  </div>
+  <label>Title <input name="unlock_title" maxlength="120" placeholder="What buyers will unlock"></label>
+  <label>Content <span>Use a complete https:// URL for links and downloads.</span>
+    <textarea name="unlock_content" maxlength="12000" placeholder="Tutorial text or https://example.com/link"></textarea>
+  </label>
+</details>
+{{end}}
+
+{{define "post"}}
+{{$post := .Post}}{{$root := .Root}}
+<article class="post {{if not $post.IsThread}}post--reply{{end}}" id="{{$post.Anchor}}">
+  <header class="post__meta">
+    {{if $post.Subject}}<span class="post__subject">{{$post.Subject}}</span>{{end}}
+    <span class="post__author">{{$post.Author}}</span>
+    <time datetime="{{$post.CreatedAt.Format "2006-01-02T15:04:05Z07:00"}}">{{date $post.CreatedAt}}</time>
+    <a class="post__number" href="#{{$post.Anchor}}">No.{{$post.ID}}</a>
+  </header>
+  <div class="post__content">
+    {{if $post.ImagePath}}
+    <figure class="post__media">
+      <a href="{{$post.ImagePath}}" target="_blank" rel="noopener"><img src="{{$post.ImagePath}}" alt="Uploaded image" loading="lazy"></a>
+      {{if $post.ImageName}}<figcaption>{{$post.ImageName}}</figcaption>{{end}}
+    </figure>
+    {{end}}
+    <p class="post__body">{{$post.Body}}</p>
+    {{with $post.Unlock}}
+    <section class="unlockable">
+      <strong>{{.Title}}</strong><span class="unlockable__type">{{.ContentType}} · {{.Price}} {{plural .Price "credit" "credits"}}</span>
+      {{if .HasAccess}}
+        {{if eq .ContentType "tutorial"}}<p class="unlockable__content">{{.Content}}</p>{{else}}<p><a href="{{.Content}}" target="_blank" rel="noopener">Open {{if eq .ContentType "download"}}download{{else}}link{{end}}</a></p>{{end}}
+      {{else if $root.User}}
+      <form method="post" action="/action">
+        <input type="hidden" name="csrf" value="{{$root.CSRF}}">
+        <input type="hidden" name="action" value="unlock">
+        <input type="hidden" name="unlock_id" value="{{.ID}}">
+        <input type="hidden" name="board" value="{{$root.Board.Slug}}">
+        {{if $root.ThreadID}}<input type="hidden" name="thread" value="{{$root.ThreadID}}">{{end}}
+        <button type="submit">Unlock for {{.Price}} {{plural .Price "credit" "credits"}}</button>
+      </form>
+      {{else}}<p>Sign in to unlock this content.</p>{{end}}
+    </section>
+    {{end}}
+  </div>
+  {{if $post.ThreadLink}}<footer class="post__footer"><a href="{{$post.ThreadLink}}">{{$post.ReplyCount}} {{plural $post.ReplyCount "reply" "replies"}} · View thread</a></footer>{{end}}
+</article>
+{{end}}
+
+{{define "index.html"}}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{if .ActiveThread}}{{.ActiveThread.Subject}} · {{end}}{{.AppName}}</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js" defer></script>
+</head>
+<body hx-boost="true" hx-target="body" hx-select="body" hx-swap="outerHTML" hx-push-url="true">
+  <a class="skip-link" href="#content">Skip to posts</a>
+  <header class="site-header">
+    <a class="brand" href="/">{{.AppName}}</a>
+    <nav aria-label="Boards">
+      {{range .Boards}}<a href="/?board={{.Slug}}" {{if eq .Slug $.Board.Slug}}aria-current="page"{{end}}>/{{.Slug}}/</a>{{end}}
+    </nav>
+    {{with .User}}
+    <div class="account"><strong>{{.Username}}</strong><span>{{.Credits}} {{plural .Credits "credit" "credits"}}</span><span>· {{$.EarnedToday}}/5 earned today</span>
+      <form method="post" action="/action">
+        <input type="hidden" name="csrf" value="{{$.CSRF}}"><input type="hidden" name="action" value="logout"><input type="hidden" name="board" value="{{$.Board.Slug}}">
+        {{if $.ThreadID}}<input type="hidden" name="thread" value="{{$.ThreadID}}">{{end}}<button type="submit">Sign out</button>
+      </form>
+    </div>
+    {{end}}
+  </header>
+
+  <main id="content">
+    {{with .Flash}}<div class="notice notice--{{.Type}}" role="status">{{.Message}}</div>{{end}}
+
+    {{if not .User}}
+    <section class="auth-panel" aria-label="Account">
+      <details><summary>Sign in</summary><form method="post" action="/action">
+        <input type="hidden" name="csrf" value="{{.CSRF}}"><input type="hidden" name="action" value="login"><input type="hidden" name="board" value="{{.Board.Slug}}">{{if .ThreadID}}<input type="hidden" name="thread" value="{{.ThreadID}}">{{end}}
+        <label>Username <input name="username" required autocomplete="username"></label>
+        <label>Password <input type="password" name="password" required autocomplete="current-password"></label><button type="submit">Sign in</button>
+      </form></details>
+      <details><summary>Create account</summary><form method="post" action="/action">
+        <input type="hidden" name="csrf" value="{{.CSRF}}"><input type="hidden" name="action" value="register"><input type="hidden" name="board" value="{{.Board.Slug}}">{{if .ThreadID}}<input type="hidden" name="thread" value="{{.ThreadID}}">{{end}}
+        <label>Username <span>3–24 letters, numbers, or underscores</span><input name="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" required autocomplete="username"></label>
+        <label>Password <span>At least 8 characters</span><input type="password" name="password" minlength="8" maxlength="128" required autocomplete="new-password"></label><button type="submit">Create account</button>
+      </form></details>
+    </section>
+    {{end}}
+
+    {{if .NotFound}}
+      <section class="empty-state"><p>That thread does not exist.</p><a href="/?board={{.Board.Slug}}">Return to /{{.Board.Slug}}/</a></section>
+    {{else if .ActiveThread}}
+      <div class="page-actions"><a href="/?board={{.Board.Slug}}">← Back to /{{.Board.Slug}}/</a></div>
+      {{template "post" (dict "Post" .ActiveThread "Root" .)}}
+      {{if .User}}
+      <details class="composer" open><summary>Reply and earn 1 credit</summary><form method="post" action="/action" enctype="multipart/form-data">
+        <input type="hidden" name="csrf" value="{{.CSRF}}"><input type="hidden" name="action" value="reply"><input type="hidden" name="board" value="{{.Board.Slug}}"><input type="hidden" name="thread" value="{{.ThreadID}}"><input type="hidden" name="thread_id" value="{{.ThreadID}}">
+        <label>Comment <textarea name="body" maxlength="8000" required></textarea></label>
+        <label>Image <span>Optional · JPG, PNG, GIF, or WebP · max {{.MaxUploadMB}} MB</span><input type="file" name="image" accept="image/jpeg,image/png,image/gif,image/webp"></label>
+        {{template "unlock-fields" .}}<button type="submit">Post reply</button>
+      </form></details>
+      {{else}}<p class="login-prompt">Sign in to reply and earn credits.</p>{{end}}
+      <section class="replies" aria-label="Replies">{{range .Replies}}{{template "post" (dict "Post" . "Root" $)}}{{end}}</section>
+    {{else}}
+      {{if .User}}
+      <details class="composer"><summary>Start a thread and earn 2 credits</summary><form method="post" action="/action" enctype="multipart/form-data">
+        <input type="hidden" name="csrf" value="{{.CSRF}}"><input type="hidden" name="action" value="new_thread"><input type="hidden" name="board" value="{{.Board.Slug}}">
+        <label>Subject <input name="subject" maxlength="120"></label>
+        <label>Comment <textarea name="body" maxlength="8000" required></textarea></label>
+        <label>Image <span>Optional · JPG, PNG, GIF, or WebP · max {{.MaxUploadMB}} MB</span><input type="file" name="image" accept="image/jpeg,image/png,image/gif,image/webp"></label>
+        {{template "unlock-fields" .}}<button type="submit">Create thread</button>
+      </form></details>
+      {{else}}<p class="login-prompt">Sign in to start a thread and earn credits.</p>{{end}}
+      <section class="thread-list" aria-label="Threads">
+        {{range .Threads}}{{template "post" (dict "Post" . "Root" $)}}{{else}}<div class="empty-state">No threads yet.</div>{{end}}
+      </section>
+    {{end}}
+  </main>
+  <footer class="site-footer">Posts earn up to 5 credits each day. Creators receive credits when their content is unlocked.</footer>
+</body>
+</html>
+{{end}}
