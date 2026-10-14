@@ -1,0 +1,36 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      APP_NAME: Threadline
+      APP_ENV: development
+      DATABASE_URL: pgsql:host=db;port=5432;dbname=threadline
+      DATABASE_USER: threadline
+      DATABASE_PASSWORD: threadline
+      MAX_UPLOAD_MB: 5
+    volumes:
+      - ./public/uploads:/var/www/html/public/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: threadline
+      POSTGRES_USER: threadline
+      POSTGRES_PASSWORD: threadline
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U threadline -d threadline"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  postgres_data:
+
