@@ -1,0 +1,50 @@
+:root { color-scheme: dark; font-family: Arial, sans-serif; color: #ddd; background: #111; }
+* { box-sizing: border-box; }
+body { margin: 0; font-size: 14px; line-height: 1.4; }
+a { color: #8ab4f8; }
+a:hover { color: white; }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid white; }
+
+.skip-link { position: absolute; left: -9999px; }
+.skip-link:focus { left: 8px; top: 8px; background: #222; padding: 8px; }
+.site-header { display: flex; flex-wrap: wrap; gap: 20px; padding: 12px 16px; border-bottom: 1px solid #444; background: #181818; }
+.brand { color: white; font-size: 18px; font-weight: bold; text-decoration: none; }
+nav { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+nav a[aria-current="page"] { color: white; font-weight: bold; }
+
+main { width: min(1000px, calc(100% - 24px)); margin: auto; padding: 20px 0 50px; }
+.notice, .composer, .post, .empty-state { border: 1px solid #444; background: #1c1c1c; }
+.notice { max-width: 650px; margin: 0 auto 16px; padding: 10px; }
+.composer { max-width: 650px; margin: 0 auto 24px; }
+.composer summary { padding: 9px 10px; cursor: pointer; font-weight: bold; }
+.composer form { display: grid; gap: 10px; padding: 12px; border-top: 1px solid #444; }
+.form-row { display: grid; grid-template-columns: 110px 1fr; gap: 10px; }
+.form-row label span { display: block; color: #999; font-size: 12px; }
+
+input, textarea { width: 100%; padding: 7px; border: 1px solid #555; border-radius: 0; background: #111; color: white; font: inherit; }
+textarea { min-height: 110px; resize: vertical; }
+button, .button { justify-self: end; padding: 7px 12px; border: 1px solid #666; border-radius: 0; background: #333; color: white; cursor: pointer; font: inherit; text-decoration: none; }
+button:hover, .button:hover { background: #444; }
+
+.thread-list, .replies { display: grid; gap: 12px; }
+.post--reply { width: fit-content; min-width: min(450px, 100%); max-width: 900px; margin-left: 24px; background: #222; }
+.post__meta { display: flex; flex-wrap: wrap; gap: 4px 10px; padding: 6px 8px; border-bottom: 1px solid #444; color: #aaa; font-size: 12px; }
+.post__subject, .post__author { color: white; font-weight: bold; }
+.post__number { margin-left: auto; }
+.post__content { display: flow-root; min-height: 60px; padding: 10px; }
+.post__body { margin: 4px 0; overflow-wrap: anywhere; }
+.post__media { float: left; max-width: min(300px, 40%); margin: 0 14px 6px 0; }
+.post__media img { display: block; max-width: 100%; max-height: 260px; border: 1px solid #444; }
+.post__media figcaption { overflow: hidden; color: #999; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.post__footer { padding: 6px 9px; border-top: 1px solid #444; font-size: 12px; }
+.page-actions { margin-bottom: 14px; }
+.empty-state { padding: 28px 16px; text-align: center; }
+.site-footer { padding: 16px; border-top: 1px solid #444; color: #888; text-align: center; font-size: 12px; }
+
+@media (max-width: 600px) {
+    .form-row { grid-template-columns: 1fr; gap: 3px; }
+    .form-row label span { display: inline; }
+    .post--reply { min-width: 0; margin-left: 10px; }
+    .post__media { float: none; max-width: 100%; margin: 0 0 10px; }
+    button { justify-self: stretch; }
+}
