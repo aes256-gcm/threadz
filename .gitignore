@@ -1,4 +1,6 @@
 .env
+.env.local
+node_modules/
 public/uploads/*
 !public/uploads/.gitkeep
 

@@ -1,0 +1,13 @@
+{
+  "productName": "Threadline",
+  "category": "Communication",
+  "description": "A small anonymous imageboard for simple threaded conversations and image sharing.",
+  "detail": "Threadline is a lightweight PHP and PostgreSQL imageboard. Visitors can browse topic boards, create anonymous threads, post replies, attach images, and see active discussions rise through bump ordering. Its compact dark interface is designed for quick, low-friction community conversations.",
+  "maintainerName": "evan",
+  "contactEmail": "im@evan.lat",
+  "license": "UNLICENSED",
+  "website": "https://github.com/aes256-gcm/threadz",
+  "supportUrl": "https://github.com/aes256-gcm/threadz/issues",
+  "alternatives": [],
+  "partnershipNotes": ""
+}

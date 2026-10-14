@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@zenith-hosting/cli": "^0.1.3"
+  }
+}

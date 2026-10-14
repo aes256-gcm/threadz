@@ -1,0 +1,51 @@
+x-zenith:
+  env:
+    DATABASE_PASSWORD:
+      generate: '([A-Za-z0-9_-]{16})([A-Za-z0-9_-]{16})'
+      services: [app]
+    POSTGRES_PASSWORD:
+      alias: DATABASE_PASSWORD
+      services: [db]
+  catalog:
+    name: Threadline
+    description: A small anonymous imageboard built with PHP and PostgreSQL.
+    authors: [evan]
+    source: https://github.com/aes256-gcm/threadz
+    license: UNLICENSED
+    tags: [php, postgres, forum]
+  expose:
+    - { service: app, port: 80, web: true }
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      APP_NAME: Threadline
+      APP_ENV: production
+      DATABASE_URL: pgsql:host=db;port=5432;dbname=threadline
+      DATABASE_USER: threadline
+      MAX_UPLOAD_MB: "5"
+    volumes:
+      - uploads:/var/www/html/public/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: threadline
+      POSTGRES_USER: threadline
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U threadline -d threadline"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  database:
+  uploads:
