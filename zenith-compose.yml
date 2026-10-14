@@ -1,0 +1,48 @@
+x-zenith:
+  catalog:
+    name: Threadline
+    description: A compact account-based imageboard for threaded conversations and creator content.
+    authors: [evan]
+    source: https://github.com/aes256-gcm/threadz
+    license: UNLICENSED
+    tags: [go, htmx, imageboard, community]
+  expose:
+    - { service: app, port: 8080, web: true }
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      APP_NAME: Threadline
+      APP_ENV: production
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: threadline
+      DB_USER: threadline
+      PORT: "8080"
+      MAX_UPLOAD_MB: "5"
+      UPLOAD_DIR: /app/public/uploads
+    volumes:
+      - uploads:/app/public/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: threadline
+      POSTGRES_USER: threadline
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U threadline -d threadline"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  postgres_data:
+  uploads:

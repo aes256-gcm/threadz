@@ -2,7 +2,7 @@
   "productName": "Threadline",
   "category": "Communication",
   "description": "A small anonymous imageboard for simple threaded conversations and image sharing.",
-  "detail": "Threadline is a lightweight PHP and PostgreSQL imageboard. Visitors can browse topic boards, create anonymous threads, post replies, attach images, and see active discussions rise through bump ordering. Its compact dark interface is designed for quick, low-friction community conversations.",
+  "detail": "Threadline is a lightweight Go, HTMX, and PostgreSQL imageboard. Visitors can browse topic boards, create accounts, post threads and replies, attach images, and see active discussions rise through bump ordering. Members earn credits by participating and can spend them to unlock creator tutorials, links, and downloads.",
   "maintainerName": "evan",
   "contactEmail": "im@evan.lat",
   "license": "UNLICENSED",

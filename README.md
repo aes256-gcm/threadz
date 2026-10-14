@@ -18,7 +18,7 @@ For development without Docker, provide the `DB_*` variables used in `docker-com
 
 ## Zenith preview
 
-Create a gitignored `.env.local` containing matching `DATABASE_PASSWORD` and `POSTGRES_PASSWORD` values, then run:
+Create a gitignored `.env.local` containing matching `DB_PASSWORD` and `POSTGRES_PASSWORD` values plus a `SESSION_SECRET` of at least 32 characters, then run:
 
 ```bash
 zenith check --upload-size
