@@ -113,7 +113,7 @@ $appName = env('APP_NAME', 'Threadline');
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light">
+    <meta name="color-scheme" content="dark">
     <title><?= e($board['name']) ?> — <?= e($appName) ?></title>
     <link rel="stylesheet" href="/assets/style.css">
 </head>
@@ -129,12 +129,6 @@ $appName = env('APP_NAME', 'Threadline');
 </header>
 
 <main id="content">
-    <section class="board-heading">
-        <p class="eyebrow">/<?= e($board['slug']) ?>/</p>
-        <h1><?= e($board['name']) ?></h1>
-        <p><?= e($board['description']) ?></p>
-    </section>
-
     <?php if ($flash): ?>
         <div class="notice notice--<?= e($flash['type']) ?>" role="status"><?= e($flash['message']) ?></div>
     <?php endif; ?>
