@@ -1,11 +1,4 @@
 x-zenith:
-  env:
-    DATABASE_PASSWORD:
-      generate: '([A-Za-z0-9_-]{16})([A-Za-z0-9_-]{16})'
-      services: [app]
-    POSTGRES_PASSWORD:
-      alias: DATABASE_PASSWORD
-      services: [db]
   catalog:
     name: Threadline
     description: A small anonymous imageboard built with PHP and PostgreSQL.

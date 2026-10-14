@@ -11,17 +11,27 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .brand { color: white; font-size: 18px; font-weight: bold; text-decoration: none; }
 nav { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
 nav a[aria-current="page"] { color: white; font-weight: bold; }
+.account { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-left: auto; color: #aaa; }
+.account strong { color: white; }
+.account form { display: inline; }
+.account button { padding: 3px 7px; }
 
 main { width: min(1000px, calc(100% - 24px)); margin: auto; padding: 20px 0 50px; }
 .notice, .composer, .post, .empty-state { border: 1px solid #444; background: #1c1c1c; }
 .notice { max-width: 650px; margin: 0 auto 16px; padding: 10px; }
+.auth-panel { display: flex; justify-content: center; gap: 10px; margin-bottom: 18px; }
+.auth-panel details { width: min(310px, 50%); border: 1px solid #444; background: #1c1c1c; }
+.auth-panel summary { padding: 8px; cursor: pointer; font-weight: bold; }
+.auth-panel form { display: grid; gap: 8px; padding: 10px; border-top: 1px solid #444; }
+.auth-panel label { display: grid; gap: 3px; }
 .composer { max-width: 650px; margin: 0 auto 24px; }
 .composer summary { padding: 9px 10px; cursor: pointer; font-weight: bold; }
 .composer form { display: grid; gap: 10px; padding: 12px; border-top: 1px solid #444; }
 .form-row { display: grid; grid-template-columns: 110px 1fr; gap: 10px; }
 .form-row label span { display: block; color: #999; font-size: 12px; }
 
-input, textarea { width: 100%; padding: 7px; border: 1px solid #555; border-radius: 0; background: #111; color: white; font: inherit; }
+input, textarea, select { width: 100%; padding: 7px; border: 1px solid #555; border-radius: 0; background: #111; color: white; font: inherit; }
+input[type="checkbox"] { width: auto; }
 textarea { min-height: 110px; resize: vertical; }
 button, .button { justify-self: end; padding: 7px 12px; border: 1px solid #666; border-radius: 0; background: #333; color: white; cursor: pointer; font: inherit; text-decoration: none; }
 button:hover, .button:hover { background: #444; }
@@ -38,10 +48,22 @@ button:hover, .button:hover { background: #444; }
 .post__media figcaption { overflow: hidden; color: #999; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
 .post__footer { padding: 6px 9px; border-top: 1px solid #444; font-size: 12px; }
 .page-actions { margin-bottom: 14px; }
+.login-prompt { margin: 0; padding: 10px; }
+.unlock-fields { padding: 8px; border: 1px solid #444; }
+.unlock-fields summary { padding: 0; border: 0; }
+.unlock-fields[open] { display: grid; gap: 8px; }
+.check-row { display: flex; align-items: center; gap: 7px; }
+.unlockable { clear: both; margin-top: 12px; padding: 10px; border: 1px dashed #666; background: #151515; }
+.unlockable__type { margin-left: 8px; color: #999; font-size: 12px; }
+.unlockable p { margin: 7px 0 0; }
+.unlockable form { margin-top: 8px; }
 .empty-state { padding: 28px 16px; text-align: center; }
 .site-footer { padding: 16px; border-top: 1px solid #444; color: #888; text-align: center; font-size: 12px; }
 
 @media (max-width: 600px) {
+    .account { width: 100%; margin-left: 0; }
+    .auth-panel { display: grid; }
+    .auth-panel details { width: 100%; }
     .form-row { grid-template-columns: 1fr; gap: 3px; }
     .form-row label span { display: inline; }
     .post--reply { min-width: 0; margin-left: 10px; }
